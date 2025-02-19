@@ -25,8 +25,11 @@ export default function QuizSetup() {
   function handleSubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const { count, category, difficulty } = e.target as HTMLFormElement;
-    getData(count.value, category.value, difficulty.value).then((res) =>
-      setQuizList(res)
+    getData(Number(count.value), category.value, difficulty.value).then(
+      (res) => {
+        console.log(res);
+        setQuizList(res);
+      }
     );
     navigate("/question");
   }

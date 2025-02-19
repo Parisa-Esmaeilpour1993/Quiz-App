@@ -1,6 +1,17 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-interface QuizContextProps {
-  quizList: any[];
-  setQuizList: Dispatch<SetStateAction<any[]>>;
+
+interface Question {
+  id: number;
+  question: string;
+  answers: string[];
+  correct_answer: string;
+  incorrect_answers: string[];
 }
-export const QuizContext = createContext<QuizContextProps | null>(null);
+interface QuizContextProps {
+  quizList: Question[];
+  setQuizList: Dispatch<SetStateAction<Question[]>>;
+}
+export const QuizContext = createContext<QuizContextProps>({
+  quizList: [],
+  setQuizList: () => {},
+});

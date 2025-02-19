@@ -9,7 +9,7 @@ export async function getData(
     `${BASE_URL}?amount=${count}&category=${category}&difficulty=${difficulty}`
   );
   const res = await data.json();
-  return res.result;
+  return res.results;
 }
 
 export async function getCategory() {
