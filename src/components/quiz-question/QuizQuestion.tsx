@@ -156,7 +156,9 @@ export default function QuizQuestion() {
   // Handle next question
   function handleNextQuestion() {
     if (state.currentQuestionIndex === quizList.length - 1) {
-      navigate("/result");
+      navigate("/result", {
+        state: { selectedAnswers: state.selectedAnswers }, // Pass selected answers to Result page
+      });
     } else {
       dispatch({
         type: "NEXT_QUESTION",

@@ -10,8 +10,12 @@ interface Question {
 interface QuizContextProps {
   quizList: Question[];
   setQuizList: Dispatch<SetStateAction<Question[]>>;
+  selectedAnswers: { [key: number]: string };
+  setSelectedAnswers: Dispatch<SetStateAction<{ [key: number]: string }>>;
 }
 export const QuizContext = createContext<QuizContextProps>({
   quizList: [],
   setQuizList: () => {},
+  selectedAnswers: {},
+  setSelectedAnswers: () => {},
 });
