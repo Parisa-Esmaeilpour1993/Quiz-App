@@ -1,18 +1,6 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext } from "react";
+import { QuizContextProps } from "../types/types";
 
-interface Question {
-  id: number;
-  question: string;
-  answers: string[];
-  correct_answer: string;
-  incorrect_answers: string[];
-}
-interface QuizContextProps {
-  quizList: Question[];
-  setQuizList: Dispatch<SetStateAction<Question[]>>;
-  selectedAnswers: { [key: number]: string };
-  setSelectedAnswers: Dispatch<SetStateAction<{ [key: number]: string }>>;
-}
 export const QuizContext = createContext<QuizContextProps>({
   quizList: [],
   setQuizList: () => {},
