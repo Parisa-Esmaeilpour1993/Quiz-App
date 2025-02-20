@@ -1,19 +1,26 @@
 import { Input, Select } from "@chakra-ui/react";
-import powerButton from "../../assets/images/power-button.svg";
 import React, { useContext, useEffect, useState } from "react";
-import { getCategory, getData } from "../../services/api/Apis";
-import { QuizContext } from "../../context/QuizContext";
 import { useNavigate } from "react-router";
+import powerButton from "../../assets/images/power-button.svg";
+import { QuizContext } from "../../context/QuizContext";
+import { getCategory, getData } from "../../services/api/Apis";
+import { toast } from "react-toastify";
 
 export default function QuizSetup() {
   const [category, setCategory] = useState<{ id: number; name: string }[]>([]);
   const navigate = useNavigate();
   const quizContext = useContext(QuizContext);
+  const [formValues, setFormValues] = useState({
+    count: "",
+    category: "",
+    difficulty: "",
+  });
+
+  const [countError, setCountError] = useState(""); // State for count error message
 
   if (!quizContext) {
     return <p className="text-red-500 text-lg">Context not found!</p>;
   }
-
   const { setQuizList } = quizContext;
 
   useEffect(() => {
@@ -22,24 +29,71 @@ export default function QuizSetup() {
     });
   }, []);
 
+  // Handle input changes
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+    // Clear error when user starts typing
+    if (name === "count") {
+      setCountError("");
+    }
+  }
+
+  // Handle select changes
+  function handleSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  }
+
+  // Validate count value
+  function validateCount(count: string): boolean {
+    const countValue = Number(count);
+    if (countValue < 5 || countValue > 55) {
+      setCountError("Please enter a number between 5 and 55.");
+      return false;
+    }
+    setCountError(""); // Clear error if valid
+    return true;
+  }
+
+  // Handle form submission
   function handleSubmitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const { count, category, difficulty } = e.target as HTMLFormElement;
-    getData(Number(count.value), category.value, difficulty.value).then(
-      (res) => {
-        console.log(res);
-        setQuizList(res);
-      }
-    );
-    navigate("/question");
+    const { count, category, difficulty } = formValues;
+
+    // Validate count
+    if (!validateCount(count)) {
+      return; // Stop further execution if count is invalid
+    }
+
+    if (!category && !difficulty) {
+      toast("Please select a category and difficulty level.");
+      return;
+    }
+    if (!category) {
+      toast("Please select a category level.");
+      return;
+    }
+
+    if (!difficulty) {
+      toast("Please select a difficulty level.");
+      return;
+    }
+
+    // Fetch data and navigate to the next page
+    getData(Number(count), category, difficulty).then((res) => {
+      setQuizList(res);
+      navigate("/question");
+    });
   }
+
+
   return (
     <div className="flex flex-col gap-4 items-center p-12 text-center min-h-screen bg-gradient-to-br from-purple-800 to-blue-300 text-white">
       <h1 className="text-5xl font-extrabold text-yellow-400 tracking-wide text-shadow-md">
         QUIZ
       </h1>
       <p className="text-xl font-semibold tracking-wide">Setup Quiz</p>
-
       <form
         className="w-full text-left flex flex-col gap-8"
         onSubmit={handleSubmitForm}
@@ -57,8 +111,15 @@ export default function QuizSetup() {
             type="number"
             name="count"
             placeholder="Enter number of questions"
-            className="bg-white text-gray-800 rounded-md"
+            className={`bg-white text-gray-800 rounded-md ${
+              countError ? "border-red-500" : ""
+            }`}
+            value={formValues.count}
+            onChange={handleInputChange}
           />
+          {countError && (
+            <p className="text-red-500 text-sm mt-1">{countError}</p>
+          )}
         </div>
 
         {/* Category */}
@@ -73,7 +134,9 @@ export default function QuizSetup() {
             id="category"
             name="category"
             placeholder="Select category"
-            className="bg-white text-gray-800 rounded-md "
+            className="bg-white text-gray-800 rounded-md"
+            value={formValues.category}
+            onChange={handleSelectChange}
           >
             {category.map((item) => (
               <option key={item.id} value={item.id}>
@@ -96,6 +159,8 @@ export default function QuizSetup() {
             name="difficulty"
             placeholder="Select difficulty"
             className="bg-white text-gray-800 rounded-md"
+            value={formValues.difficulty}
+            onChange={handleSelectChange}
           >
             <option value="easy">Easy</option>
             <option value="medium">Medium</option>

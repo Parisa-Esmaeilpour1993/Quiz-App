@@ -172,6 +172,8 @@ export default function QuizQuestion() {
     dispatch({ type: "PREV_QUESTION" });
   }
 
+  console.log(quizList);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-800 to-blue-300 p-8 text-white">
       <h2 className="text-2xl font-bold mb-4">{`Question ${
@@ -181,7 +183,7 @@ export default function QuizQuestion() {
         {currentQuestion.question}
       </p>
 
-      <div className="flex flex-col gap-4 w-full max-w-lg">
+      <div className="flex flex-col gap-4 px-2 min-w-max">
         {shuffledAnswers.map((answer: string, index: number) => (
           <Button
             key={index}
