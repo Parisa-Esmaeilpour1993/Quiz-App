@@ -153,7 +153,7 @@ export default function Result() {
       {/* Modal for displaying questions */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl h-5/6 w-full">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl h-5/6 w-full overflow-y-auto max-h-max">
             <h2 className="text-2xl font-bold mb-4 text-center text-black">
               {modalType === "unanswered"
                 ? "Unanswered Questions"
@@ -165,49 +165,68 @@ export default function Result() {
             >
               Close
             </button>
-
             {/* Display unanswered questions */}
-            {modalType === "unanswered" &&
-              unansweredQuestions.map((question, index) => (
-                <div key={index} className="mb-4 border p-4 rounded-md">
-                  <p className="font-bold text-red-600 mb-3">
-                    Question:{" "}
-                    <span className="text-black">{question.question}</span>
-                  </p>
-                  <p className="text-green-700 font-semibold">
-                    Correct Answer:{" "}
-                    <span className="font-medium text-green-500">
-                      {question.correct_answer}
-                    </span>
-                  </p>
-                </div>
-              ))}
-
+            {modalType === "unanswered" && (
+              <>
+                {unansweredQuestions.length > 0 ? (
+                  unansweredQuestions.map((question, index) => (
+                    <div
+                      key={index}
+                      className="mb-4 border p-4 rounded-md text-black"
+                    >
+                      <p className="font-bold text-red-600 mb-3">
+                        Question:{" "}
+                        <span className="text-black">{question.question}</span>
+                      </p>
+                      <p className="text-green-700 font-semibold">
+                        Correct Answer:{" "}
+                        <span className="font-medium text-green-500">
+                          {question.correct_answer}
+                        </span>
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 h-5/6">
+                    There is no unanswered questions.
+                  </div>
+                )}
+              </>
+            )}
             {/* Display incorrect questions */}
-            {modalType === "incorrect" &&
-              incorrectQuestions.map((question, index) => (
-                <div
-                  key={index}
-                  className="mb-4 border p-4 rounded-md text-black"
-                >
-                  <p className="font-bold">
-                    Question:{" "}
-                    <span className="font-medium">{question.question}</span>
-                  </p>
-                  <p className="text-green-700 font-semibold">
-                    Correct Answer:{" "}
-                    <span className="text-green-500 font-medium">
-                      {question.correct_answer}
-                    </span>
-                  </p>
-                  <p className="text-red-700 font-semibold">
-                    Your Answer:{" "}
-                    <span className="text-red-500 font-medium">
-                      {selectedAnswers[quizList.indexOf(question)]}
-                    </span>
-                  </p>
-                </div>
-              ))}
+            {modalType === "incorrect" && (
+              <>
+                {incorrectQuestions.length > 0 ? (
+                  incorrectQuestions.map((question, index) => (
+                    <div
+                      key={index}
+                      className="mb-4 border p-4 rounded-md text-black"
+                    >
+                      <p className="font-bold text-red-600 mb-3">
+                        Question:{" "}
+                        <span className="text-black">{question.question}</span>
+                      </p>
+                      <p className="text-green-700 font-semibold">
+                        Correct Answer:{" "}
+                        <span className="text-green-500 font-medium">
+                          {question.correct_answer}
+                        </span>
+                      </p>
+                      <p className="text-red-700 font-semibold">
+                        Your Answer:{" "}
+                        <span className="text-red-500 font-medium">
+                          {selectedAnswers[quizList.indexOf(question)]}
+                        </span>
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 h-5/6">
+                    There is no question with incorrect answer.
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       )}
