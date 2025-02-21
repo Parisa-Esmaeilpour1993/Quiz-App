@@ -2,89 +2,50 @@ import { Button } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { QuizContext } from "../../context/QuizContext";
+import Modal from "../result-modal/ResultModal";
+import EmojiFeedback from "../emojiFeedback-result/EmojiFeedback";
 
 export default function Result() {
   const { quizList } = useContext(QuizContext);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Retrieve selected answers from navigation state
   const selectedAnswers = location.state?.selectedAnswers || {};
 
-  // Calculate score based on the formula
   let correctAnswers = 0;
   let incorrectAnswers = 0;
   quizList.forEach((question, index) => {
     const selectedAnswer = selectedAnswers[index];
     if (selectedAnswer) {
       if (selectedAnswer === question.correct_answer) {
-        correctAnswers += 1; // Correct answer
+        correctAnswers += 1;
       } else {
-        incorrectAnswers += 1; // Incorrect answer
+        incorrectAnswers += 1;
       }
     }
   });
 
-  // Calculate total score based on the formula: (correctAnswers * 3 - incorrectAnswers) / (totalQuestions * 3) * 100
   const totalQuestions = quizList.length;
   const totalScore =
     ((correctAnswers * 3 - incorrectAnswers) / (totalQuestions * 3)) * 100;
 
-  // Format the percentage to two decimal places
   let percentage = parseFloat(totalScore.toFixed(2));
 
-  // Function to determine emoji based on percentage
-  function getEmoji() {
-    if (percentage < 25)
-      return (
-        <div>
-          😢 <p className="text-xl text-red-500 mt-3 mb-8">Try More...</p>
-        </div>
-      );
-    if (percentage >= 25 && percentage < 50)
-      return (
-        <div>
-          😕{" "}
-          <p className="text-xl text-yellow-500 mt-3 mb-8">
-            You Can be Better!
-          </p>{" "}
-        </div>
-      );
-    if (percentage >= 50 && percentage < 75)
-      return (
-        <div>
-          🙂 <p className="text-xl text-orange-700 mt-3 mb-8">It's Good!</p>
-        </div>
-      );
-    if (percentage >= 75)
-      return (
-        <div>
-          😄 <p className="text-xl text-green-400 mt-3 mb-8">Excellent!</p>
-        </div>
-      );
-    return "";
-  }
+  const emoji = <EmojiFeedback percentage={percentage} />;
 
-  // Get the emoji for the current score
-  const emoji = getEmoji();
-
-  // State for showing modal and its type
   const [showModal, setShowModal] = useState(false);
-  const [modalType, setModalType] = useState(""); // "unanswered" or "incorrect"
+  const [modalType, setModalType] = useState("");
 
-  // Filter unanswered questions
   const unansweredQuestions = quizList.filter(
     (_, index) => !selectedAnswers[index]
   );
 
-  // Filter incorrect questions
   const incorrectQuestions = quizList.filter(
     (question, index) =>
       selectedAnswers[index] &&
       selectedAnswers[index] !== question.correct_answer
   );
 
-  // Close modal
   const handleCloseModal = () => {
     setShowModal(false);
     setModalType("");
@@ -142,7 +103,7 @@ export default function Result() {
           <Button
             colorScheme="yellow"
             size="lg"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/setup")}
             className="w-full my-4"
           >
             Play Again
@@ -150,86 +111,16 @@ export default function Result() {
         </div>
       </div>
 
-      {/* Modal for displaying questions */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl h-5/6 w-full overflow-y-auto max-h-max">
-            <h2 className="text-2xl font-bold mb-4 text-center text-black">
-              {modalType === "unanswered"
-                ? "Unanswered Questions"
-                : "Incorrect Answers"}
-            </h2>
-            <button
-              className="absolute top-2 right-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-              onClick={handleCloseModal}
-            >
-              Close
-            </button>
-            {/* Display unanswered questions */}
-            {modalType === "unanswered" && (
-              <>
-                {unansweredQuestions.length > 0 ? (
-                  unansweredQuestions.map((question, index) => (
-                    <div
-                      key={index}
-                      className="mb-4 border p-4 rounded-md text-black"
-                    >
-                      <p className="font-bold text-red-600 mb-3">
-                        Question:{" "}
-                        <span className="text-black">{question.question}</span>
-                      </p>
-                      <p className="text-green-700 font-semibold">
-                        Correct Answer:{" "}
-                        <span className="font-medium text-green-500">
-                          {question.correct_answer}
-                        </span>
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500 h-5/6">
-                    There is no unanswered questions.
-                  </div>
-                )}
-              </>
-            )}
-            {/* Display incorrect questions */}
-            {modalType === "incorrect" && (
-              <>
-                {incorrectQuestions.length > 0 ? (
-                  incorrectQuestions.map((question, index) => (
-                    <div
-                      key={index}
-                      className="mb-4 border p-4 rounded-md text-black"
-                    >
-                      <p className="font-bold text-red-600 mb-3">
-                        Question:{" "}
-                        <span className="text-black">{question.question}</span>
-                      </p>
-                      <p className="text-green-700 font-semibold">
-                        Correct Answer:{" "}
-                        <span className="text-green-500 font-medium">
-                          {question.correct_answer}
-                        </span>
-                      </p>
-                      <p className="text-red-700 font-semibold">
-                        Your Answer:{" "}
-                        <span className="text-red-500 font-medium">
-                          {selectedAnswers[quizList.indexOf(question)]}
-                        </span>
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center text-gray-500 h-5/6">
-                    There is no question with incorrect answer.
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Use the Modal component */}
+      <Modal
+        showModal={showModal}
+        handleCloseModal={handleCloseModal}
+        modalType={modalType}
+        unansweredQuestions={unansweredQuestions}
+        incorrectQuestions={incorrectQuestions}
+        selectedAnswers={selectedAnswers}
+        quizList={quizList}
+      />
     </div>
   );
 }

@@ -38,9 +38,9 @@ export default function QuizQuestion() {
 
   if (hasError) {
     return (
-      <div className="text-center text-white">
-        <p className="text-lg">
-          Loading took too long. Please try again later.
+      <div className="text-center mt-12">
+        <p className="text-lg text-red-700">
+          Loading took too long. Please try again later...
         </p>
         <Button mt={4} colorScheme="yellow" onClick={() => navigate("/")}>
           Go Back

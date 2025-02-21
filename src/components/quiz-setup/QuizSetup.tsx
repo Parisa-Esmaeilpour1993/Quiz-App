@@ -35,7 +35,7 @@ export default function QuizSetup() {
   }
 
   return (
-    <div className="flex flex-col gap-4 items-center p-12 text-center min-h-screen bg-gradient-to-br from-purple-800 to-blue-300 text-white">
+    <div className="flex flex-col gap-4 items-center p-10 text-center min-h-screen bg-gradient-to-br from-purple-800 to-blue-300 text-white">
       <h1 className="text-5xl font-extrabold text-yellow-400 tracking-wide text-shadow-md">
         QUIZ
       </h1>
