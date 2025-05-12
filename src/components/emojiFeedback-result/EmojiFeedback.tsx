@@ -12,7 +12,7 @@ export default function EmojiFeedback({ percentage }: EmojiFeedbackProps) {
   if (percentage >= 25 && percentage < 50)
     return (
       <div>
-        😕{" "}
+        😕
         <p className="text-xl text-yellow-500 mt-3 mb-8">You Can be Better!</p>
       </div>
     );

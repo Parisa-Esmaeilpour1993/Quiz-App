@@ -1,50 +1,62 @@
-# React + TypeScript + Vite
+# Quiz Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, interactive quiz application built with React that allows users to test their knowledge through engaging quizzes.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Interactive quiz interface
+- Multiple choice questions
+- Real-time score tracking
+- User-friendly interface
+- Immediate feedback on answers
+- Progress tracking
+- Score summary at the end of each quiz
 
-## Expanding the ESLint configuration
+## 📋 Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React.js
+- CSS3
+- React Hooks
+- React Router (for navigation)
+- Local Storage (for saving progress)
 
-- Configure the top-level `parserOptions` property like this:
+## ScreenShots
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+<img src="src/assets/images/01.png" />
+<img src="src/assets/images/02.png" />
+<img src="src/assets/images/03.png" />
+<img src="src/assets/images/04.png" />
+<img src="src/assets/images/05.png" />
+
+## 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- Node.js (version 14.0.0 or higher)
+- npm (version 6.0.0 or higher)
+
+## 🚀 Getting Started
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/Parisa-Esmaeilpour1993/Quiz-App
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Navigate to the project directory:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+3. Install dependencies:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+### Running the Application
+
+1. Start the development server:
+
+```bash
+npm run dev
+```
+
+2. Open your browser and enjoy
